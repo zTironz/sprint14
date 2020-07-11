@@ -15,12 +15,15 @@ const createCard = (req, res) => {
 };
 
 const deleteCard = (req, res) => {
-  Card.findByIdAndRemove(req.params.cardId)
+  Card.findById(req.params.cardId)
     .then((card) => {
       if (!card) {
         res.status(404).send({ message: 'Нет карточки' });
-      } else {
-        res.send({ card });
+      } if (card.owner._id.toString() === req.user._id) {
+        return card.remove(req.params.cardId).then(() => res.status(200).send({ message: 'Карточка удалена' }))
+      }
+       else {
+        res.send({ message:'Недостаточно прав' });
       }
     })
     .catch((err) => res.status(500).send({ message: err.message }));
