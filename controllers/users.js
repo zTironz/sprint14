@@ -50,7 +50,7 @@ module.exports.createUser = (req, res) => {
       if (err.name === 'ValidationError') {
         res.status(400).send({ message: err.message });
       } else {
-        res.status(500).send({ message: err.message });
+        res.status(409).send({ message: err.message });
       }
     });
 };
