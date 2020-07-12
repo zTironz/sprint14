@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => validator.isURL(v),
-      message: 'введите URL в формате: http://my-site.ru/...',
+      message: 'введите URL в формате: http://site.ru/image.jpg',
     },
   },
   email: {

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const cardSchema = mongoose.Schema({
   name: {
@@ -11,11 +12,8 @@ const cardSchema = mongoose.Schema({
     type: String,
     required: true,
     validate: {
-      validator(value) {
-        const regExp = /^https?:\/\/(www\.)?\w+(-\w+)*(\.\w+(-\w+)*)*(\/.+)*/;
-        return regExp.test(value);
-      },
-      message: 'введите URL в формате: http://my-site.ru/...',
+      validator: (v) => validator.isURL(v),
+      message: 'введите URL в формате: http://site.ru/image.jpg',
     },
   },
   owner: {
