@@ -29,8 +29,7 @@ module.exports.createUser = (req, res) => {
   } = req.body;
   if (password.length < 8) {
     return res.status(400).send({ message: 'Пароль должен быть не менее 8 символов' });
-  }
-  return bcrypt.hash(password, 10)
+  } return bcrypt.hash(password, 10)
     .then((hash) => User.create({
       email,
       password: hash,
