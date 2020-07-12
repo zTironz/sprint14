@@ -46,7 +46,13 @@ module.exports.createUser = (req, res) => {
         email: user.email,
       },
     }))
-    .catch((err) => res.status(500).send({ message: err.massage }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: err.massage });
+      } else {
+        res.status(500).send({ message: err.massage });
+      }
+    });
 };
 
 module.exports.login = (req, res) => {
