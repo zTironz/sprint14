@@ -22,7 +22,7 @@ const deleteCard = (req, res) => {
         res.status(404).send({ message: 'Нет карточки' });
       } if (card.owner._id.toString() === req.user._id) {
         return card.remove(req.params.cardId).then(() => res.status(200).send({ message: 'Карточка удалена' }));
-      } res.send({ message: 'Недостаточно прав' });
+      } res.status(403).send({ message: 'Недостаточно прав' });
     })
     .catch((err) => res.status(500).send({ message: err.message }));
 };
