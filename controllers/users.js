@@ -21,12 +21,15 @@ module.exports.getUser = (req, res) => {
         res.send({ user });
       }
     })
-    .catch(() => res.status(500).send({ message: 'Нет пользователя с таким id' }));
+    .catch(() => res.status(400).send({ message: 'Нет пользователя с таким id' }));
 };
 module.exports.createUser = (req, res) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
+  if (!password) {
+    return res.status(400).send({ message: 'Пароль не задан' });
+  }
   if (password.length < 8) {
     return res.status(400).send({ message: 'Пароль должен быть не менее 8 символов' });
   } return bcrypt.hash(password, 10)
@@ -49,7 +52,7 @@ module.exports.createUser = (req, res) => {
       if (err.name === 'ValidationError') {
         res.status(400).send({ message: err.message });
       } else {
-        res.status(409).send({ message: err.message });
+        res.status(409).send({ message: 'Данный Email уже используется' });
       }
     });
 };

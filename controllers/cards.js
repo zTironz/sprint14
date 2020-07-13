@@ -30,7 +30,13 @@ const deleteCard = (req, res) => {
         return card.remove(req.params.cardId).then(() => res.status(200).send({ message: 'Карточка удалена' }));
       } res.status(403).send({ message: 'Недостаточно прав' });
     })
-    .catch((err) => res.status(500).send({ message: err.message }));
+    // eslint-disable-next-line consistent-return
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return res.status(400).send({ message: 'Некорректный id' });
+      }
+      res.status(500).send({ message: err.message });
+    });
 };
 
 module.exports = {
