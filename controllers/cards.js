@@ -3,7 +3,13 @@ const Card = require('../models/card');
 const getCards = (req, res) => {
   Card.find({})
     .then((cards) => res.send({ cards }))
-    .catch((err) => res.status(500).send({ message: err.message }));
+    // eslint-disable-next-line consistent-return
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return res.status(400).send({ message: 'Некорректный id' });
+      }
+      res.status(500).send({ message: err.message });
+    });
 };
 
 const createCard = (req, res) => {
@@ -25,7 +31,7 @@ const deleteCard = (req, res) => {
     // eslint-disable-next-line consistent-return
     .then((card) => {
       if (!card) {
-        res.status(404).send({ message: 'Нет карточки' });
+        return res.status(404).send({ message: 'Нет карточки' });
       } if (card.owner._id.toString() === req.user._id) {
         return card.remove(req.params.cardId).then(() => res.status(200).send({ message: 'Карточка удалена' }));
       } res.status(403).send({ message: 'Недостаточно прав' });
